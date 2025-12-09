@@ -15,6 +15,7 @@ import {TrustedMsgSenderProviderLookup} from "../src/utils/TrustedMsgSenderProvi
 import {ITrustedMsgSenderProviderLookup} from "../src/interfaces/ITrustedMsgSenderProviderLookup.sol";
 import {CoinConfigurationVersions} from "../src/libs/CoinConfigurationVersions.sol";
 import {IZoraFactory} from "../src/interfaces/IZoraFactory.sol";
+import {ProxyShim} from "../../test/utils/ProxyShim.sol";
 
 /**
  * @title DeployCompleteIsolatedSystem
@@ -101,12 +102,15 @@ contract DeployCompleteIsolatedSystem is Script {
         console.log("");
 
         // ============================================================
-        // STEP 3: Deploy Factory Proxy (placeholder for hook deployment)
+        // STEP 3: Deploy Factory Proxy with ProxyShim (placeholder)
         // ============================================================
-        console.log("STEP 3: Deploying Factory Proxy (placeholder)...");
-        // We need the factory address before deploying the hook, so deploy proxy first
-        deployment.factoryProxy = address(new ZoraFactory(address(0)));
-        console.log("  Factory Proxy (placeholder):", deployment.factoryProxy);
+        console.log("STEP 3: Deploying Factory Proxy (with temporary shim)...");
+        // We need the factory address before deploying the hook, so deploy proxy with ProxyShim first
+        ProxyShim shim = new ProxyShim();
+        deployment.factoryProxy = address(new ZoraFactory(address(shim)));
+        console.log("  ProxyShim:", address(shim));
+        console.log("  Factory Proxy:", deployment.factoryProxy);
+        console.log("  (Will be upgraded to real implementation later)");
         console.log("");
 
         // ============================================================
@@ -172,14 +176,15 @@ contract DeployCompleteIsolatedSystem is Script {
         console.log("");
 
         // ============================================================
-        // STEP 7: Initialize Factory Proxy
+        // STEP 7: Upgrade Factory Proxy from ProxyShim to Real Implementation
         // ============================================================
-        console.log("STEP 7: Initializing Factory Proxy...");
+        console.log("STEP 7: Upgrading Factory Proxy to real implementation...");
         UUPSUpgradeable(deployment.factoryProxy).upgradeToAndCall(
             deployment.factoryImpl,
             abi.encodeWithSelector(ZoraFactoryImpl.initialize.selector, deployment.owner)
         );
-        console.log("  Factory initialized with owner:", deployment.owner);
+        console.log("  Factory upgraded and initialized");
+        console.log("  Factory owner:", deployment.owner);
         console.log("");
 
         // ============================================================

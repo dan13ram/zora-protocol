@@ -116,7 +116,7 @@ contract DeployCompleteIsolatedSystem is Script {
         (IHooks hook, bytes32 salt) = HooksDeployment.deployHookWithExistingOrNewSalt(
             HooksDeployment.FOUNDRY_SCRIPT_ADDRESS,
             HooksDeployment.makeHookCreationCode(
-                IPoolManager(poolManager),
+                address(IPoolManager(poolManager)),
                 deployment.factoryProxy,
                 ITrustedMsgSenderProviderLookup(deployment.trustedMsgSenderLookup),
                 deployment.hookUpgradeGate
@@ -283,11 +283,11 @@ contract DeployCompleteIsolatedSystem is Script {
         if (chainId == 8453) {
             // Base Mainnet
             protocolRewardRecipient = 0x7bf90111Ad7C22bec9E9dFf8A01A44713CC1b1B6;
-            poolManager = 0x498581ff718922c3f8e6a244956af099b2652b2b;
+            poolManager = 0x498581fF718922c3f8e6A244956aF099B2652b2b;
             airlock = 0x660eAaEdEBc968f8f3694354FA8EC0b4c5Ba8D12;
             proxyAdmin = 0x004d6611884B4A661749B64b2ADc78505c3e1AB3;
-            uniswapUniversalRouter = 0x6ff5693b99212da76ad316178a184ab56d299b43;
-            uniswapV4PositionManager = 0x7c5f5a4bbd8fd63184577525326123b519429bdc;
+            uniswapUniversalRouter = 0x6fF5693b99212Da76ad316178A184AB56D299b43;
+            uniswapV4PositionManager = 0x7C5f5A4bBd8fD63184577525326123B519429bDc;
         } else if (chainId == 84532) {
             // Base Sepolia (Testnet)
             protocolRewardRecipient = 0x5F14C23983c9e0840Dc60dA880349622f0785420;
@@ -295,7 +295,7 @@ contract DeployCompleteIsolatedSystem is Script {
             airlock = 0xa24E35a5d71d02a59b41E7c93567626302da1958;
             proxyAdmin = 0x5F14C23983c9e0840Dc60dA880349622f0785420;
             uniswapUniversalRouter = 0x492E6456D9528771018DeB9E87ef7750EF184104;
-            uniswapV4PositionManager = 0x4b2c77d209d3405f41a037ec6c77f7f5b8e2ca80;
+            uniswapV4PositionManager = 0x4B2C77d209D3405F41a037Ec6c77F7F5b8e2ca80;
         } else {
             revert("Unsupported network. Add configuration for this chain ID.");
         }

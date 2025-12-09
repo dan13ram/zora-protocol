@@ -101,11 +101,6 @@ contract DeployCompleteCustomSystem is Script {
         ZoraFactory factory = new ZoraFactory(deployment.factoryImpl);
         deployment.factoryProxy = address(factory);
 
-        // Initialize the factory with deployer as owner
-        UUPSUpgradeable(deployment.factoryProxy).upgradeToAndCall(
-            deployment.factoryImpl,
-            abi.encodeWithSelector(ZoraFactoryImpl.initialize.selector, deployment.owner)
-        );
         console.log("  ZoraFactory Proxy:", deployment.factoryProxy);
         console.log("  Owner:", ZoraFactoryImpl(deployment.factoryProxy).owner());
         console.log("");
@@ -173,7 +168,7 @@ contract DeployCompleteCustomSystem is Script {
         if (chainId == 8453) {
             // Base Mainnet
             protocolRewardRecipient = 0x7bf90111Ad7C22bec9E9dFf8A01A44713CC1b1B6;
-            poolManager = 0x498581ff718922c3f8e6a244956af099b2652b2b;
+            poolManager = 0x498581fF718922c3f8e6A244956aF099B2652b2b;
             airlock = 0x660eAaEdEBc968f8f3694354FA8EC0b4c5Ba8D12;
             contentCoinImpl = 0x7Cad62748DDf516CF85bC2C05C14786D84Cf861c; // Existing ContentCoin
             hook = 0xC8d077444625eB300A427a6dfB2b1DBf9b159040; // Existing hook
